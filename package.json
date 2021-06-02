@@ -1,6 +1,6 @@
 {
   "name": "prisma-nest",
-  "version": "1.0.0",
+  "version": "1.0.12",
   "description": "Generates nestjs componenets using types from prisma!",
   "main": "main.js",
   "bin": {
@@ -14,5 +14,9 @@
   "dependencies": {
     "inquirer": "^8.1.0",
     "mz": "^2.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Darren120/prisma-nest"
   }
 }

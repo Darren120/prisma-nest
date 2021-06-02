@@ -31,7 +31,8 @@ async function main() {
   const withoutFirstLetter = name.substr(1)
   const cammelUpper = firstLetterUpper + withoutFirstLetter
   const cammelLower = firstLetterLower + withoutFirstLetter
-  const dir = __dirname + `/src/${name}`
+  const dir = process.cwd() + `/src/${name}`
+  
   const overWrtieChoices = ["Abort", "Overwrite All"]
   const overWritePrompt = [
     {
@@ -45,7 +46,7 @@ async function main() {
     {
       type: "message",
       name: "finishMsg",
-      message: `\n Done! Please remeber to import your new ${cammelUpper}Module into your app.module.ts \n    so nestJS can know about it!`,
+      message: `==================================================================================================== \n Done! Please remeber to import your new ${cammelUpper}Module into your app.module.ts in the 'imports' array so \n nestJS can know about it! [Press return or enter to exit] \n ====================================================================================================`,
   
     }
   ];
@@ -53,7 +54,7 @@ async function main() {
     {
       type: "message",
       name: "abortMsg",
-      message: `\n Aborted! That was a close one! Phew! `,
+      message: `\n ==================================================================================================== \n Aborted! That was a close one! Phew! [Press return or enter to exit] \n ====================================================================================================`,
   
     }
   ];
@@ -97,169 +98,172 @@ async function main() {
   }
 
 }
-main();
+try {
+  main();
+} catch (error) {
+  console.log(error)
+}
 
 
 
 async function writeController(name, cammelUpper, cammelLower) {
   
-  const content = `
-  import {
-    Controller,
-    Get,
-    Param,
-    Post,
-    Body,
-    Put,
-    Delete,
-  } from '@nestjs/common';
-  import { ${cammelUpper}Service } from './${name}.service';
-  import { ${cammelUpper} as ${name}Model } from '@prisma/client';
-  
-  @Controller('${cammelLower}')
-  export class ${cammelUpper}Controller {
-    constructor(private readonly ${cammelLower}Service: ${name}Service) {}
-  
-    @Get('${name}/:id')
-    async get${cammelUpper}ByID(@Param('id') id: string): Promise<${name}Model> {
-      return this.${cammelLower}Service.${name}({ id: Number(id) });
-    }
-  
-    @Post()
-    async create${cammelUpper}(@Body() ${cammelLower}Data): Promise<${name}Model> {
-      return this.${cammelLower}Service.create${cammelUpper}( ${cammelLower}Data);
-    }
-  
-    @Delete('${name}/:id')
-    async delete${cammelUpper}ByID(@Param('id') id: string): Promise<${name}Model> {
-      rreturn this.${cammelLower}Service.delete({ id: Number(id) });
-    }
+  const content = 
+`import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
+import { ${cammelUpper}Service } from './${name}.service';
+import { ${cammelUpper} as ${name}Model } from '@prisma/client';
+
+@Controller('${cammelLower}')
+export class ${cammelUpper}Controller {
+  constructor(private readonly ${cammelLower}Service: ${name}Service) {}
+
+  @Get('${name}/:id')
+  async get${cammelUpper}ByID(@Param('id') id: string): Promise<${name}Model> {
+    return this.${cammelLower}Service.${name}({ id: Number(id) });
   }
-  `
-  await fs.writeFile(__dirname + `/src/${name}/${cammelLower}.controller.ts`,content)
+
+  @Post()
+  async create${cammelUpper}(@Body() ${cammelLower}Data): Promise<${name}Model> {
+    return this.${cammelLower}Service.create${cammelUpper}( ${cammelLower}Data);
+  }
+
+  @Delete('${name}/:id')
+  async delete${cammelUpper}ByID(@Param('id') id: string): Promise<${name}Model> {
+    rreturn this.${cammelLower}Service.delete({ id: Number(id) });
+  }
+}
+`
+  await fs.writeFile(process.cwd() + `/src/${name}/${cammelLower}.controller.ts`,content)
 }
 async function writeService(name, cammelUpper, cammelLower) {
-  const content = `
-  import { Injectable } from '@nestjs/common';
-  import { PrismaService } from './prisma.service';
-  import {
-    ${name},
-    Prisma
-  } from '@prisma/client';
-  
-  @Injectable()
-  export class ${cammelUpper}Service {
-    constructor(private prisma: PrismaService) {}
-  
-    async ${name}(${cammelLower}WhereUniqueInput: Prisma.${cammelUpper}WhereUniqueInput): Promise<${name} | null> {
-      return this.prisma.${name}.findUnique({
-        where: ${cammelLower}WhereUniqueInput,
-      });
-    }
-  
-    async ${name}s(params: {
-      skip?: number;
-      take?: number;
-      cursor?: Prisma.${cammelUpper}WhereUniqueInput;
-      where?: Prisma.${cammelUpper}WhereInput;
-      orderBy?: Prisma.${name}OrderByInput;
-    }): Promise<${name}[]> {
-      const { skip, take, cursor, where, orderBy } = params;
-      return this.prisma.${name}.findMany({
-        skip,
-        take,
-        cursor,
-        where,
-        orderBy,
-      });
-    }
-  
-    async create${cammelUpper}(data: Prisma.${name}CreateInput): Promise<${name}> {
-      return this.prisma.${cammelLower}.create({
-        data,
-      });
-    }
-  
-    async update${cammelUpper}(params: {
-      where: Prisma.${cammelUpper}WhereUniqueInput;
-      data: Prisma.${cammelUpper}UpdateInput;
-    }): Promise<${name}> {
-      const { where, data } = params;
-      return this.prisma.${cammelLower}.update({
-        data,
-        where,
-      });
-    }
-  
-    async delete${cammelUpper}(where: Prisma.${cammelUpper}WhereUniqueInput): Promise<${name}> {
-      return this.prisma.${cammelLower}.delete({
-        where,
-      });
-    }
+  const content = 
+`import { Injectable } from '@nestjs/common';
+import { PrismaService } from './prisma.service';
+import { ${cammelUpper}, Prisma } from '@prisma/client';
+
+@Injectable()
+export class ${cammelUpper}Service {
+  constructor(private prisma: PrismaService) {}
+
+  async ${name}(${cammelLower}WhereUniqueInput: Prisma.${cammelUpper}WhereUniqueInput): Promise<${name} | null> {
+    return this.prisma.${name}.findUnique({
+      where: ${cammelLower}WhereUniqueInput,
+    });
   }
-  `
-  await fs.writeFile(__dirname + `/src/${name}/${cammelLower}.service.ts`,content)
+
+  async ${name}s(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.${cammelUpper}WhereUniqueInput;
+    where?: Prisma.${cammelUpper}WhereInput;
+    orderBy?: Prisma.${name}OrderByInput;
+  }): Promise<${name}[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.${name}.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
+  }
+
+  async create${cammelUpper}(data: Prisma.${name}CreateInput): Promise<${name}> {
+    return this.prisma.${cammelLower}.create({
+      data,
+    });
+  }
+
+  async update${cammelUpper}(params: {
+    where: Prisma.${cammelUpper}WhereUniqueInput;
+    data: Prisma.${cammelUpper}UpdateInput;
+  }): Promise<${name}> {
+    const { where, data } = params;
+    return this.prisma.${cammelLower}.update({
+      data,
+      where,
+    });
+  }
+
+  async delete${cammelUpper}(where: Prisma.${cammelUpper}WhereUniqueInput): Promise<${name}> {
+    return this.prisma.${cammelLower}.delete({
+      where,
+    });
+  }
+}
+`
+  await fs.writeFile(process.cwd() + `/src/${name}/${cammelLower}.service.ts`,content)
 }
 async function writeModule(name, cammelUpper, cammelLower) {
-  const content = `
-  import { Module } from '@nestjs/common';
-  import { ${cammelUpper}Controller } from './${cammelLower}.controller';
-  import { ${cammelUpper}Service } from './${cammelLower}.service';
-  
-  @Module({
-    imports: [],
-    controllers: [${cammelUpper}Controller],
-    providers: [${cammelUpper}Service],
-  })
-  export class ${cammelUpper}Module {}`
+  const content = 
+  `import { Module } from '@nestjs/common';
+import { ${cammelUpper}Controller } from './${cammelLower}.controller';
+import { ${cammelUpper}Service } from './${cammelLower}.service';
 
-  await fs.writeFile(__dirname + `/src/${name}/${cammelLower}.module.ts`, content)
+@Module({
+  imports: [],
+  controllers: [${cammelUpper}Controller],
+  providers: [${cammelUpper}Service],
+})
+export class ${cammelUpper}Module {}
+`
+
+  await fs.writeFile(process.cwd() + `/src/${name}/${cammelLower}.module.ts`, content)
   
 }
 async function writeControllerTest(name, cammelUpper, cammelLower) {
-  content = `
-  import { Test, TestingModule } from '@nestjs/testing';
-  import { ${cammelUpper}Controller } from './${cammelLower}.controller';
-  
-  describe('${cammelUpper}Controller', () => {
-    let controller: ${cammelUpper}Controller;
-  
-    beforeEach(async () => {
-      const module: TestingModule = await Test.createTestingModule({
-        controllers: [${cammelUpper}Controller],
-      }).compile();
-  
-      controller = module.get<${cammelUpper}Controller>(${cammelUpper}Controller);
-    });
-  
-    it('should be defined', () => {
-      expect(controller).toBeDefined();
-    });
-  });`
-  await fs.writeFile(__dirname + `/src/${name}/${cammelLower}.controller.spec.ts`, content)
+  content = 
+`import { Test, TestingModule } from '@nestjs/testing';
+import { ${cammelUpper}Controller } from './${cammelLower}.controller';
+
+describe('${cammelUpper}Controller', () => {
+  let controller: ${cammelUpper}Controller;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [${cammelUpper}Controller],
+    }).compile();
+
+    controller = module.get<${cammelUpper}Controller>(${cammelUpper}Controller);
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+});
+`
+  await fs.writeFile(process.cwd() + `/src/${name}/${cammelLower}.controller.spec.ts`, content)
 
 }
 async function writeServiceTest(name, cammelUpper, cammelLower) {
-  const content = `
-  import { Test, TestingModule } from '@nestjs/testing';
-  import { ${cammelUpper}Service } from './${cammelLower}.service';
-  
-  describe('${cammelUpper}Service', () => {
-    let service: ${cammelUpper}Service;
-  
-    beforeEach(async () => {
-      const module: TestingModule = await Test.createTestingModule({
-        providers: [${cammelUpper}Service],
-      }).compile();
-  
-      service = module.get<${cammelUpper}Service>(${cammelUpper}Service);
-    });
-  
-    it('should be defined', () => {
-      expect(service).toBeDefined();
-    });
+  const content = 
+`import { Test, TestingModule } from '@nestjs/testing';
+import { ${cammelUpper}Service } from './${cammelLower}.service';
+
+describe('${cammelUpper}Service', () => {
+  let service: ${cammelUpper}Service;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [${cammelUpper}Service],
+    }).compile();
+
+    service = module.get<${cammelUpper}Service>(${cammelUpper}Service);
   });
-  `
-  await fs.writeFile(__dirname + `/src/${name}/${cammelLower}.service.spec.ts`, content)
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+});
+`
+  await fs.writeFile(process.cwd() + `/src/${name}/${cammelLower}.service.spec.ts`, content)
   
 }
