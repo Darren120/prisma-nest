@@ -1,10 +1,11 @@
 {
   "name": "prisma-nest",
-  "version": "1.0.13",
+  "version": "1.0.15",
   "description": "Generates nestjs componenets using types from prisma!",
   "main": "main.js",
   "bin": {
-    "gen": "main.js"
+    "gen": "main.js",
+    "prisma-nest": "main.js"
 },
   "scripts": {
     "start": "node main.js"

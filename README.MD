@@ -12,9 +12,25 @@ npm i -D prisma-nest
 ## Usage
 
 ```bash
-npx prisma-nest gen <Enter the class / object name>
+npx prisma-nest <Enter the class / object name>
 ```
 
+OR
+
+```bash
+npx gen <Enter the class / object name>
+```
+## Example
+
+```bash
+npx prisma-nest gen User
+```
+
+OR
+
+```bash
+npx gen User
+```
 ## License
 
 free
