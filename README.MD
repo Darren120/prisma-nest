@@ -12,25 +12,16 @@ npm i -D prisma-nest
 ## Usage
 
 ```bash
-npx prisma-nest <Enter the class / object name>
+npx prisma-nest 
 ```
 
 OR
 
 ```bash
-npx gen <Enter the class / object name>
-```
-## Example
-
-```bash
-npx prisma-nest gen User
+npx gen 
 ```
 
-OR
-
-```bash
-npx gen User
-```
+This will give you a choice to generate either Controller, Module, Service, or all three nestJS componenets.
 ## License
 
 free
